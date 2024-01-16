@@ -13,6 +13,8 @@ var currentQuestionIndex = 0;
 var questionTitle= document.getElementById("question-title");
 var questionChoices = document.getElementById("choices");
 var timerInterval
+var correctSound = new Audio('assets/sfx/correct.wav')
+var incorrectSound = new Audio('assets/sfx/incorrect.wav')
 
 if (secondsLeft<=0 || currentQuestionIndex>questions.length){
     endQuiz()
@@ -23,14 +25,20 @@ startButton.addEventListener("click", function() {
     startQuiz()
 })
 
-submit.addEventListener("click", function(){
+submit.addEventListener("click", function(event){
+    event.preventDefault()
     var userScore ={
         username: initials.value.trim(),
         score: finalScore,
     }
-    var userScoreObj= JSON.stringify(userScore)
-    localStorage.setItem("user", userScoreObj)
-})
+    if(userScore.username===""){
+        alert("Can not enter blank initials")
+    }else if (userScore.username.length>3){
+        alert("Initials can not be longer than 3 characters")
+    }else{
+        var userScoreObj= JSON.stringify(userScore)
+        localStorage.setItem('highscores', userScoreObj)
+}})
 
 function setTime(){
     secondsLeft= 61
@@ -80,8 +88,10 @@ function checkAnswer(index) {
     var question = questions[currentQuestionIndex];
     if (index === question.correct) {
         score++;
+        correctSound.play();
     } else {
         secondsLeft -= 10;
+        incorrectSound.play();
     }
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
