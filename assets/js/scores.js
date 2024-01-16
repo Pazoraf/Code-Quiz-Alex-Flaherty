@@ -1,20 +1,22 @@
 var highscores = JSON.parse(localStorage.getItem('highscores'));
 var highscoresList = document.querySelector('#highscores');
-var highscoresArray = [];
+var clearButton = document.querySelector('#clear');
+
 
 function renderHighscores() {
-  var highscoresString = localStorage.getItem('savedHighscores');
-  if (highscoresString === null) {
-    return;
+  highscores.sort((a, b) => b.score - a.score);
+  for (i = 0; i < highscores.length; i++) {
+    var highscore = highscores[i]
+    var li = document.createElement("li", "data-index");
+    li.textContent= `${highscore.username} - Score: ${highscore.score}`
+    highscoresList.appendChild(li)
   }
-  highscores = JSON.parse(highscoresString);
-  highscoresArray.push(...highscores);
-}
-function saveHighscores(){
-  var highscoresArrayString = JSON.stringify(highscoresArray)
-  localStorage.setItem("savedHighscores", highscoresArrayString)
 }
 
+clearButton.addEventListener("click", function(event){
+  event.preventDefault
+  highscoresList.innerHTML = "";
+  localStorage.removeItem("highscores")
+})
+
 renderHighscores()
-saveHighscores()
-console.log(highscoresArray)
