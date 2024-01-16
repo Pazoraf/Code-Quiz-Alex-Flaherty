@@ -15,6 +15,8 @@ var questionChoices = document.getElementById("choices");
 var timerInterval
 var correctSound = new Audio('assets/sfx/correct.wav')
 var incorrectSound = new Audio('assets/sfx/incorrect.wav')
+var highscoresArray = JSON.parse(localStorage.getItem('highscores')) || [];
+
 
 if (secondsLeft<=0 || currentQuestionIndex>questions.length){
     endQuiz()
@@ -25,20 +27,30 @@ startButton.addEventListener("click", function() {
     startQuiz()
 })
 
-submit.addEventListener("click", function(event){
-    event.preventDefault()
-    var userScore ={
-        username: initials.value.trim(),
-        score: finalScore,
+submit.addEventListener("click", function(event) {
+    event.preventDefault();
+    var userScore = {
+      username: initials.value.trim(),
+      score: finalScore,
+    };
+
+    if (userScore.username === "") {
+      alert("Cannot enter blank initials");
+    } else if (userScore.username.length > 3) {
+      alert("Initials cannot be longer than 3 characters");
+    } else {
+      var isDuplicate = highscoresArray.some(function(dupScore) {
+        return dupScore.username === userScore.username && dupScore.score === userScore.score;
+      });
+
+      if (isDuplicate) {
+        alert("Duplicate submission. Username and Score already exist.");
+      } else {
+        highscoresArray.push(userScore);
+        localStorage.setItem('highscores', JSON.stringify(highscoresArray));
+      }
     }
-    if(userScore.username===""){
-        alert("Can not enter blank initials")
-    }else if (userScore.username.length>3){
-        alert("Initials can not be longer than 3 characters")
-    }else{
-        var userScoreObj= JSON.stringify(userScore)
-        localStorage.setItem('highscores', userScoreObj)
-}})
+  });
 
 function setTime(){
     secondsLeft= 61
