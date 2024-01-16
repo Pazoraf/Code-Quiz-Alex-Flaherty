@@ -1,3 +1,4 @@
+//questions stored as an array of objects, with question title being stored as a key, the potential answers stored as an array of strings, and the correct answer stored as a number corresponding to the array index in the answers array key.
 var questions = [
     {question:"Which HTML element is used to link a JavaScript file?",
     answers:["<scripting>", "<javscript>", "<js>", "<script>"],
