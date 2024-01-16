@@ -16,7 +16,7 @@ var timerInterval
 var correctSound = new Audio('assets/sfx/correct.wav')
 var incorrectSound = new Audio('assets/sfx/incorrect.wav')
 var highscoresArray = JSON.parse(localStorage.getItem('highscores')) || [];
-
+var messageElement = document.getElementById("message");
 
 if (secondsLeft<=0 || currentQuestionIndex>questions.length){
     endQuiz()
@@ -101,9 +101,11 @@ function checkAnswer(index) {
     if (index === question.correct) {
         score++;
         correctSound.play();
+        messageElement.innerHTML ="<hr><em>Correct!</em>"
     } else {
         secondsLeft -= 10;
         incorrectSound.play();
+        messageElement.innerHTML ="<hr><em>Incorrect!</em>"
     }
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
